@@ -41,16 +41,16 @@ spec:
 #            capabilities: # empêcher le container de modifier les paquets reseaux qui transitent par lui
 #              drop:
 #                - ALL     # enleve toutes les capcités du contaiber a modifier les paquets reseaux
-#          livenessProbe:    # test si la page repond  en statust 200   sinon le container est redemarré
-#            httpGet:
-#              port: 80
-#              path: /
-#            initialDelaySeconds: 10  #delai après la creation du container pour commencer les test
-#          readinessProbe:
-#            httpGet:
-#              port: 80
-#              path: /
-#            initialDelaySeconds: 10
+          livenessProbe:    # test si la page repond  en statust 200   sinon le container est redemarré
+            httpGet:
+              port: 80
+              path: /
+            initialDelaySeconds: 10  #delai après la creation du container pour commencer les test
+          readinessProbe:
+            httpGet:
+              port: 80
+              path: /
+            initialDelaySeconds: 10
 #          resources:   # ressource de ram et cpu alloués au container
 #            requests:  # ce qu'on reserve (limit basse)  au pod
 #              cpu: "200m"
