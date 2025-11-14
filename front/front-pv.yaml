@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: front-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes: # monté en lecture/écriture **par un seul nœud à la fois**.
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/front"

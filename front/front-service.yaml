@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-service
+
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080       #port du service a exposer  à l'exerieur du node
+      protocol: TCP
+      targetPort: 80   # bind sur le port 80 du container
+  selector:
+    app: front     #les pods attachés à ce service sont ceux qui ont le label app = front

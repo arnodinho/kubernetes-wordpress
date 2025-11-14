@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database-deployment
+
+spec:
+  selector:
+    matchLabels:             #determiner les pods qui appartiennent à ce déploiement
+      app: database
+  replicas: 1
+
+  template:                  #spécification du template du pod lié au déploiement
+    metadata:
+      labels:
+        app: database        #match avec le selectr du déploiement
+    spec:
+      containers:
+        - name: database
+          image: mysql:5.7
+          envFrom:            #récupération des variables d'environnement
+            - secretRef:
+                name: database-secrets
+          ports:
+            - containerPort: 3306 # spécification du port du container  mysql
+          volumeMounts:             #comment sont stockées les donées dans le container
+            - mountPath: /var/lib/mysql
+              name: database-data
+      volumes:
+        - name: database-data
+          persistentVolumeClaim:
+            claimName: database-pvc
+
+

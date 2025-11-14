@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-deployment
+#  annotations:  #permet de skip les rules de checkov
+#    checkov.io/skip1: CKV_K8S_35=Secrets needed as env for WordPress entrypoint
+#    checkov.io/skip2: CKV_K8S_40=Containers should run as a high UID to avoid host conflict
+
+spec:
+  selector:
+    matchLabels:             #determiner les pods qui appartiennent à ce déploiement
+      app: front
+  replicas: 1
+
+  template:                  #spécification du template du pod lié au déploiement
+    metadata:
+      labels:
+        app: front        #match avec le selectr du déploiement
+    spec:
+      containers:
+        - name: front
+#          image: docker.io/library/wordpress@sha256:70246a8dc8282bbe4f9d53d3e88f4b0a2287cdb84b8da356d8bf44542ae14f2d   #on prend plutot l'image Id  que le no de l'image que le hash est unique. une meme version peut changer
+          image:  wordpress:5.8.3-php7.4-apache
+          # id de l'image wordpress:5.8.3-php7.4-apache
+          envFrom:            #récupération des variables d'environnement
+            - secretRef:
+                name: front-secrets
+          ports:
+            - containerPort: 80 # spécification du port du container  wordpress
+          volumeMounts:             #comment sont stockées les donées dans le container
+            - name: front-data
+              mountPath: /var/www/egtdem/   #Monte de préférence /var/www/html/wp-content (pas tout /var/www/) pour ne pas écraser le core WordPress de l’image.
+#            - name: tmp
+#              mountPath: /tmp
+#          securityContext:
+#            readOnlyRootFilesystem: true  #le container a le droit en lecture uniquement sur les fichiers  de node (server)
+#            runAsUser: 33        # www-data   wordpress est souvent www-data = 33:33
+#            runAsGroup: 33       # www-data
+#            allowPrivilegeEscalation: false   # empêche que le hacker augmente ses privilèges via des process complexes (tour de passe passe)
+#
+#            capabilities: # empêcher le container de modifier les paquets reseaux qui transitent par lui
+#              drop:
+#                - ALL     # enleve toutes les capcités du contaiber a modifier les paquets reseaux
+#          livenessProbe:    # test si la page repond  en statust 200   sinon le container est redemarré
+#            httpGet:
+#              port: 80
+#              path: /
+#            initialDelaySeconds: 10  #delai après la creation du container pour commencer les test
+#          readinessProbe:
+#            httpGet:
+#              port: 80
+#              path: /
+#            initialDelaySeconds: 10
+#          resources:   # ressource de ram et cpu alloués au container
+#            requests:  # ce qu'on reserve (limit basse)  au pod
+#              cpu: "200m"
+#              memory: "256Mi"
+#            limits:         # limits max a ne pas dépasser.  zu delà le pod peut redemarrer
+#              cpu: "500m"
+#              memory: "512Mi"
+
+      volumes:
+        - name: front-data
+          persistentVolumeClaim:
+            claimName: front-pvc  # conserve les données du pod sur le node  de cluster de maniere persistante
+#        - name: tmp
+#          emptyDir: {} #créé aussi lors de la création du pod et existe durant sa durée de vie. tous les container
+                       # du pod pevent lire dedans. par contre lorsqu'un conteneur redemarre la donnée est conservé
+                      # puisqu'elle se situe au niveau du pod
+
+#      automountServiceAccountToken: false  #desactive le service account par défault qui a trop de privilège pour plus de sécurité
+                                          ## ✅ Pas de token monté dans le pod (si pas besoin de parler à l’API K8s)
+#      securityContext:
+#        seccompProfile:
+#          type: RuntimeDefault  # profil qui interdit la manipulation des fichiers system si jamais le container est compromis
+                                # autorise seulement les appels système “normaux” pour une appli web. reduit les degats d'un hacker

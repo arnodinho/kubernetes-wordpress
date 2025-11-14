@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+
+spec:
+  ports:
+    - port: 3306       #port du service a exposer dans le cluster
+      protocol: TCP
+  selector:
+    app: database     #les pods attachés à ce service sont ceux qui ont le label app = database
+    # forme du nom dns interne du service : <nom-du-service>.<namespace>.svc.cluster.local
+    # ici c'est database-service.egtdem.svc.cluster.local
