@@ -68,7 +68,7 @@ spec:
                        # du pod pevent lire dedans. par contre lorsqu'un conteneur redemarre la donnée est conservé
                       # puisqu'elle se situe au niveau du pod
 
-#      automountServiceAccountToken: false  #desactive le service account par défault qui a trop de privilège pour plus de sécurité
+      automountServiceAccountToken: false  #desactive le service account par défault qui a trop de privilège pour plus de sécurité
                                           ## ✅ Pas de token monté dans le pod (si pas besoin de parler à l’API K8s)
 #      securityContext:
 #        seccompProfile:
