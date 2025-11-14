@@ -51,13 +51,13 @@ spec:
               port: 80
               path: /
             initialDelaySeconds: 10
-#          resources:   # ressource de ram et cpu alloués au container
-#            requests:  # ce qu'on reserve (limit basse)  au pod
-#              cpu: "200m"
-#              memory: "256Mi"
-#            limits:         # limits max a ne pas dépasser.  zu delà le pod peut redemarrer
-#              cpu: "500m"
-#              memory: "512Mi"
+          resources:   # ressource de ram et cpu alloués au container
+            requests:  # ce qu'on reserve (limit basse)  au pod
+              cpu: "200m"
+              memory: "256Mi"
+            limits:         # limits max a ne pas dépasser.  zu delà le pod peut redemarrer
+              cpu: "500m"
+              memory: "512Mi"
 
       volumes:
         - name: front-data
