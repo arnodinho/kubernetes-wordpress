@@ -20,8 +20,7 @@ spec:
     spec:
       containers:
         - name: front
-#          image: docker.io/library/wordpress@sha256:70246a8dc8282bbe4f9d53d3e88f4b0a2287cdb84b8da356d8bf44542ae14f2d   #on prend plutot l'image Id  que le no de l'image que le hash est unique. une meme version peut changer
-          image:  wordpress:5.8.3-php7.4-apache
+          image: docker.io/library/wordpress@sha256:70246a8dc8282bbe4f9d53d3e88f4b0a2287cdb84b8da356d8bf44542ae14f2d   #on prend plutot l'image Id  que le no de l'image que le hash est unique. une meme version peut changer
           # id de l'image wordpress:5.8.3-php7.4-apache
           envFrom:            #récupération des variables d'environnement
             - secretRef:
