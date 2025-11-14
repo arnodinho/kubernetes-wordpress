@@ -30,8 +30,8 @@ spec:
           volumeMounts:             #comment sont stockées les donées dans le container
             - name: front-data
               mountPath: /var/www/egtdem/   #Monte de préférence /var/www/html/wp-content (pas tout /var/www/) pour ne pas écraser le core WordPress de l’image.
-#            - name: tmp
-#              mountPath: /tmp
+            - name: tmp
+              mountPath: /tmp
 #          securityContext:
 #            readOnlyRootFilesystem: true  #le container a le droit en lecture uniquement sur les fichiers  de node (server)
 #            runAsUser: 33        # www-data   wordpress est souvent www-data = 33:33
@@ -63,8 +63,8 @@ spec:
         - name: front-data
           persistentVolumeClaim:
             claimName: front-pvc  # conserve les données du pod sur le node  de cluster de maniere persistante
-#        - name: tmp
-#          emptyDir: {} #créé aussi lors de la création du pod et existe durant sa durée de vie. tous les container
+        - name: tmp
+          emptyDir: {} #créé aussi lors de la création du pod et existe durant sa durée de vie. tous les container
                        # du pod pevent lire dedans. par contre lorsqu'un conteneur redemarre la donnée est conservé
                       # puisqu'elle se situe au niveau du pod
 
