@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   name: front-deployment
   namespace: egtdem
-#  annotations:  #permet de skip les rules de checkov
-#    checkov.io/skip1: CKV_K8S_35=Secrets needed as env for WordPress entrypoint
-#    checkov.io/skip2: CKV_K8S_40=Containers should run as a high UID to avoid host conflict
+  annotations:  #permet de skip les rules de checkov
+    checkov.io/skip1: CKV_K8S_35=Secrets needed as env for WordPress entrypoint
+    checkov.io/skip2: CKV_K8S_40=Containers should run as a high UID to avoid host conflict
 
 spec:
   selector:
@@ -72,7 +72,7 @@ spec:
 
       automountServiceAccountToken: false  #desactive le service account par défault qui a trop de privilège pour plus de sécurité
                                           ## ✅ Pas de token monté dans le pod (si pas besoin de parler à l’API K8s)
-#      securityContext:
-#        seccompProfile:
-#          type: RuntimeDefault  # profil qui interdit la manipulation des fichiers system si jamais le container est compromis
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault  # profil qui interdit la manipulation des fichiers system si jamais le container est compromis
                                 # autorise seulement les appels système “normaux” pour une appli web. reduit les degats d'un hacker
