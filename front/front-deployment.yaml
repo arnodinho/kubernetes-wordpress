@@ -32,15 +32,15 @@ spec:
               mountPath: /var/www/egtdem/   #Monte de préférence /var/www/html/wp-content (pas tout /var/www/) pour ne pas écraser le core WordPress de l’image.
             - name: tmp
               mountPath: /tmp
-#          securityContext:
-#            readOnlyRootFilesystem: true  #le container a le droit en lecture uniquement sur les fichiers  de node (server)
-#            runAsUser: 33        # www-data   wordpress est souvent www-data = 33:33
-#            runAsGroup: 33       # www-data
-#            allowPrivilegeEscalation: false   # empêche que le hacker augmente ses privilèges via des process complexes (tour de passe passe)
+          securityContext:
+            readOnlyRootFilesystem: true  #le container a le droit en lecture uniquement sur les fichiers  de node (server)
+            runAsUser: 33        # www-data   wordpress est souvent www-data = 33:33
+            runAsGroup: 33       # www-data
+            allowPrivilegeEscalation: false   # empêche que le hacker augmente ses privilèges via des process complexes (tour de passe passe)
 #
-#            capabilities: # empêcher le container de modifier les paquets reseaux qui transitent par lui
-#              drop:
-#                - ALL     # enleve toutes les capcités du contaiber a modifier les paquets reseaux
+            capabilities: # empêcher le container de modifier les paquets reseaux qui transitent par lui
+              drop:
+                - ALL     # enleve toutes les capcités du contaiber a modifier les paquets reseaux
           livenessProbe:    # test si la page repond  en statust 200   sinon le container est redemarré
             httpGet:
               port: 80
@@ -67,7 +67,7 @@ spec:
             claimName: front-pvc  # conserve les données du pod sur le node  de cluster de maniere persistante
         - name: tmp
           emptyDir: {} #créé aussi lors de la création du pod et existe durant sa durée de vie. tous les container
-                       # du pod pevent lire dedans. par contre lorsqu'un conteneur redemarre la donnée est conservé
+                       # du pod pevent lire dedans.lorsqu'un conteneur redemarre la donnée est conservé
                       # puisqu'elle se situe au niveau du pod
 
       automountServiceAccountToken: false  #desactive le service account par défault qui a trop de privilège pour plus de sécurité
