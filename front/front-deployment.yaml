@@ -46,10 +46,12 @@ spec:
               port: 80
               path: /
             initialDelaySeconds: 10  #delai après la creation du container pour commencer les test
+            periodSeconds: 5
           readinessProbe:
             httpGet:
               port: 80
               path: /
+            periodSeconds: 5
             initialDelaySeconds: 10
           resources:   # ressource de ram et cpu alloués au container
             requests:  # ce qu'on reserve (limit basse)  au pod
